@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> 2fe66e5 (added gitignore)
 # Editors
 .vscode/
 .idea/
@@ -123,3 +127,6 @@ venv.bak/
 .mypy_cache/
 .dmypy.json
 dmypy.json
+
+# project-specific
+data.json
