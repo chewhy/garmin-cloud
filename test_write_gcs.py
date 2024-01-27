@@ -21,26 +21,24 @@ def new_bucket(client, bucket_name):
     return bucket
 
 
-def upload_file(bucket):
+def upload_file(bucket, file):
     """
     Uploads a test text file to Google Cloud Storage bucket.
     Creates a new file containing some sample text.
     """
-    file_name = 'my-file.txt'
-    file_content = 'this is some example text.'
-    blob_name = 'my-file-blob.txt'
 
-    with open(file_name, "w") as file:
-        file.write(file_content)
+    # Create a blob (binary large object) in bucket.
+    blob = bucket.blob(file)
 
-    blob = bucket.blob(blob_name)
-    blob.upload_from_filename(file_name)
+    # write blob into GCS bucket.
+    blob.upload_from_filename(file)
 
-if __name__ == "__main__":
-    JSON_Location = r"atd2024-4c3b61c5ad99.json"
-    Bucket_Name = "test-storage-abc"
+# if __name__ == "__main__":
+    # JSON_Location = r"atd2024-4c3b61c5ad99.json"
+    # Bucket_Name = "test-storage-abc"
 
-    client = create_client_from_json(JSON_Location)
-    # bucket = new_bucket(client, bucket_name)
-    bucket = client.bucket(Bucket_Name)
-    upload_file(bucket)
+    # client = create_client_from_json(JSON_Location)
+    # # bucket = new_bucket(client, bucket_name)
+    # bucket = client.bucket(Bucket_Name)
+    # upload_file(bucket)
+    
