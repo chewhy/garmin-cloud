@@ -1,25 +1,44 @@
-from dotenv import load_dotenv
-import os
-from garminconnect import Garmin
+"""Main file to retrieve Garmin data and write it to Google Cloud Storage (GCS)"""
 import datetime
 import json
+import os
+# from dotenv import load_dotenv
+from garminconnect import Garmin
+from test_write_gcs import (create_client_from_json,
+                            upload_file)
+
+
+#TODO use file-like object io.StringIO to upload to GCS without creating a file locally
 
 username = os.environ["ID"]
 password = os.environ["PASS"]
 
 def init_api():
-    api = Garmin(username, password)
-    api.login()
+    """Initialize API for Garmin Connect."""
+    _api = Garmin(username, password)
+    _api.login()
 
-    return api
+    return _api
 
-api = init_api()
 
-start_date = datetime.date(2019, 1, 1)
-end_date = datetime.date(2023, 12, 30)
+if __name__ == "__main__":
 
-activities = api.get_activities_by_date(
-                start_date.isoformat(), end_date.isoformat())
+    SERVICE_KEY_PATH = r'atd2024-4c3b61c5ad99.json'
+    BUCKET_NAME = "test-storage-abc"
+    DATA_FILE_PATH = r'data.json'
 
-with open("data.json", "w") as file:
-    json.dump(activities, file, indent=4)
+    start_date = datetime.date(2019, 1, 1)
+    end_date = datetime.date(2023, 12, 30)
+
+    api = init_api()
+
+    activities = api.get_activities_by_date(
+                    start_date.isoformat(), end_date.isoformat())
+
+    with open(DATA_FILE_PATH, "w", encoding="utf-8") as file:
+        json.dump(activities, file, indent=4)
+
+    gcs_client = create_client_from_json(SERVICE_KEY_PATH)
+    gcs_bucket = gcs_client.bucket(BUCKET_NAME)
+
+    upload_file(gcs_bucket, DATA_FILE_PATH)
