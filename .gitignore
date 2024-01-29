@@ -131,3 +131,4 @@ dmypy.json
 # project-specific
 data.json
 atd2024-4c3b61c5ad99.json
+*.csv
