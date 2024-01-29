@@ -3,7 +3,6 @@ import datetime
 import json
 import os
 import csv
-# from dotenv import load_dotenv
 from flatten_json import flatten
 from garminconnect import Garmin
 from test_write_gcs import (create_client_from_json,
@@ -42,12 +41,7 @@ if __name__ == "__main__":
     with open(DATA_FILE_PATH, "w", encoding="utf-8") as file:
         json.dump(activities, file, indent=4)
 
-    # # read a list of nested JSON activities
-    # with open(r'data.json', "r", encoding="utf-8") as json_file:
-    #     activities = json.load(json_file)
-
-    # iterate list and flatten JSONs
-
+    # create a list of flattened objects
     flattened_activities = []
     for activity in activities:
         flattened_activity = flatten(activity)
@@ -69,7 +63,10 @@ if __name__ == "__main__":
         # Write data to CSV file
         writer.writerows(flattened_activities)
 
+    # establish connection with Google Cloud Service
     gcs_client = create_client_from_json(SERVICE_KEY_PATH)
     gcs_bucket = gcs_client.bucket(BUCKET_NAME)
+
+    # upload JSON and CSV files to GCS
     upload_file(gcs_bucket, DATA_FILE_PATH)
     upload_file(gcs_bucket, CSV_FILE_PATH)
