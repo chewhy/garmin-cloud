@@ -1,4 +1,5 @@
-"""Main file to retrieve Garmin data and write it to Google Cloud Storage (GCS)"""
+"""Main file to retrieve activity data from Garmin and write it to Google Cloud Storage (GCS)"""
+
 import datetime
 import json
 import os
@@ -32,12 +33,16 @@ if __name__ == "__main__":
     start_date = datetime.date(2019, 1, 1)
     end_date = datetime.date(2023, 12, 30)
 
-    # retrieve data from Garmin Connect
+    # Initialize Garmin API
     api = init_api()
-    activities = api.get_activities_by_date(
-                    start_date.isoformat(), end_date.isoformat())
 
-    # dump Garmin data into a JSON file
+    # retrieve activity data from Garmin Connect
+    activities = api.get_activities_by_date(
+                                            start_date.isoformat(),
+                                            end_date.isoformat()
+                                            )
+
+    # dump activity data into a JSON file
     with open(DATA_FILE_PATH, "w", encoding="utf-8") as file:
         json.dump(activities, file, indent=4)
 
