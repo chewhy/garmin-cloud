@@ -11,6 +11,13 @@ def create_client_from_json(file_location):
     client = storage.Client.from_service_account_json(file_location)
     return client
 
+def create_client_adc(project_name):
+    """
+    Use Application Default Credentials to create Google Client object.
+    """
+    client = storage.Client(project=project_name)
+    return client
+
 def new_bucket(client, bucket_name):
     """
     Creates bucket object. This function should only be called once.
